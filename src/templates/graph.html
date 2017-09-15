@@ -1,0 +1,66 @@
+<html>
+<head>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.20.1/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.20.1/vis.min.css" rel="stylesheet" type="text/css" />
+
+    <style type="text/css">
+        #mynetwork {
+        }
+    </style>
+</head>
+<body>
+<div id="mynetwork"></div>
+
+<script type="text/javascript">
+    // create an array with nodes
+    var nodes = new vis.DataSet({{ nodes|safe }});
+    var edges = new vis.DataSet({{ edges|safe }});
+
+    // create a network
+    var container = document.getElementById('mynetwork');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+      nodes: {
+        shape: 'dot',
+        scaling: {
+          min: 10,
+          max: 30
+        },
+        font: {
+          size: 12,
+          face: 'Tahoma'
+        }
+      },
+      edges: {
+        width: 0.15,
+        color: {inherit: false},
+        smooth: {
+          type: 'continuous'
+        }
+      },
+      physics: {
+        stabilization: false,
+        barnesHut: {
+          gravitationalConstant: -80000,
+          springConstant: 0.001,
+          springLength: 200
+        }
+      },
+      interaction: {
+        tooltipDelay: 200,
+        hideEdgesOnDrag: true
+      }
+    };
+
+    // initialize your network!
+    var network = new vis.Network(container, data, options);
+</script>
+{{ nodes|length }}
+{{ edges|length }}
+</body>
+</html>
