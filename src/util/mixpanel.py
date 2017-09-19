@@ -30,7 +30,10 @@ class MpTracker(object):
 
     @staticmethod
     def incr(k):
-        MpTracker._mp_data[k] += 1
+        if k in MpTracker._mp_data:
+            MpTracker._mp_data[k] += 1
+        else:
+            MpTracker._mp_data[k] = 1
 
 
 def worker():

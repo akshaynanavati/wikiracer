@@ -6,6 +6,8 @@ takes a source wikipedia page title and a destination wikipedia page title and r
 from source to destination. While it usually returns the shortest path, it is optimized for speed and therefore is not
 guaranteed to return the shortest path.
 
+Note that this respository _requires_ Python 3.6+ to run.
+
 ## Installation
 
 ### Method One - Docker
@@ -13,7 +15,7 @@ guaranteed to return the shortest path.
 There is a Dockerfile that can be built and run on your machine if you have [docker](https://www.docker.com/). You can
 follow the instructions [here](https://docs.docker.com/get-started/) to do so.
 
-### Method Two - Python
+### Method Two - Python Server
 
 You could also just run the server on your machine. Assuming you have a network connection, everything should work
 out of the box.
@@ -21,6 +23,55 @@ out of the box.
 Assuming you have [fabric](https://get.fabric.io/), Python 3.6 installed at `/usr/local/bin/python3.6`,
 [virtualenv](https://virtualenv.pypa.io/en/stable/), and [pip](https://pip.pypa.io/en/stable/installing/)
 installed, you can just run `fab install server` to get the server running.
+
+### Method Three - Python CLI
+
+Use `fab install` to install all dependenices into a venv (or get the dependencies in some other way). Make sure you
+have either sourced the venv or the dependencies are available when the script is run. Then, the CLI can be run as
+follows (note that `--dump-graph` is optional and `--sample` is only used by `--dump-graph`):
+
+```
+# Sample input and output
+# This will also dump a graph to graph.json by randomly picking 5% of the edges
+
+$ ./bin/wikiracer.py \
+    --src "Beijing,USB,San Francisco" \
+    --dest "Mike Tyson,Scuba Diving,Tokyo" \
+    --dump-graph graph.json --sample 0.05
+
+Found path for Beijing -> Mike Tyson: ['Beijing', '1928 Winter Olympics', 'Romania', 'Diego Maradona', 'Mike Tyson']
+Found path for USB -> Scuba Diving: ['USB', 'Barnes & Noble', 'Indonesia', 'Manta ray', 'Scuba Diving']
+Found path for San Francisco -> Tokyo: ['San Francisco', 'Barcelona', 'Tokyo']
+```
+
+You can also use the CLI to visualize the graph (assuming the graph was dumped via `--dump-graph`; note that you cannot
+pass `--src` and `--dest` and also visualize the graph):
+
+```
+# This will produce an output file graph_vis.html which can then be viewed in the browser
+
+$ ./bin/wikiracer.py --visualize graph.json
+$ open graph_viz.html
+```
+
+
+
+CLI Help Message:
+
+```
+usage: python wikiracer.py [-h] [--dump-graph OUTPUT_FILE] [--sample SAMPLE]
+                           [--src SRC] [--dest DEST] [--visualize INPUT_FILE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --dump-graph OUTPUT_FILE
+                        JSON file path to dump the graph to
+  --sample SAMPLE       Edge sample frequency for graph dump
+  --src SRC             Comma separated list of wikipedia source titles
+  --dest DEST           Comma separated list of wikipedia destination titles
+  --visualize INPUT_FILE
+                        JSON file path of graph to visualize
+```
 
 ### Mixpanel
 
