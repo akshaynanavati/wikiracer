@@ -88,6 +88,9 @@ media wiki, but is not the end to end latency)
 - Length of the found path
 - Number of wiki media api requests completed in order to find the solution
 
+The Mixpanel tracking happens asynchronously - events get pushed onto a queue and there is a greenlet reading off
+the queue and sending data to Mixpanel.
+
 ## API Specification
 
 The API endpoints are structured as `http://<host>:<port>/<namespace>/v<version>/<path>`. The below docs will specify
